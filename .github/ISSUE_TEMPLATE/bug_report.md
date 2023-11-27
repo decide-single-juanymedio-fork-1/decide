@@ -7,31 +7,31 @@ assignees: ''
 
 ---
 
-**Priority**
- Choose the priority assigned to this bug: Critical, High, Medium or Low.
+**Prioridad**
+  Elija la prioridad asignada a este error: Critical, High, Medium or Low.
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Descripción**
+Una descripción clara y concisa de cuál es el error.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....' .
-3. Scroll down to '....'
-4. See error
+**Reproducir**
+Pasos para reproducir el comportamiento del error:
+1. Vaya a '...'
+2. Haga clic en '....'.
+3. Desplácese hacia abajo hasta '....'
+4. Ver error
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**Comportamiento esperado**
+Una descripción clara y concisa de lo que esperaba que sucediera.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Capturas de pantalla**
+Si corresponde, agregue capturas de pantalla para ayudar a explicar su problema.
 
-**Context (please complete the following information):**
- - Desktop or Smartphone 
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+**Contexto:**
+  - Ordenador de sobremesa o teléfono
+  - Dispositivo: [p. ej. iphone 6]
+  - SO: [p. ej. iOS8.1]
+  - Navegador [p. ej. chrome, safari ...]
+  - Versión [p. ej. 22]
 
-**Additional context**
-Add any other context about the problem here.
+**Contexto adicional**
+Agregue aquí cualquier otro contexto sobre el problema.

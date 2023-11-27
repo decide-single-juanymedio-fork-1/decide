@@ -7,16 +7,16 @@ assignees: ''
 
 ---
 
-**Priority**
- Choose the priority assigned to this feature: Critical, High, Medium or Low.
+**Prioridad**
+  Elija la prioridad asignada a esta característica: Critical, High, Medium or Low.
 
-**Describe the feature**
-A clear and concise description of what the feature is.
+**Descripción**
+Una descripción clara y concisa de cuál es la característica deseada.
 
-**Is your feature request related to a problem?**
- - Describe the problem: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
- - Describe the solution you'd like: A clear and concise description of what you want to happen.
- - Describe alternatives you've considered: A clear and concise description of any alternative solutions or features you've considered.
+**¿Su solicitud de característica está relacionada con un problema?**
+  - Describa el problema: Una descripción clara y concisa de cuál es el problema. p. ej. siempre me siento frustrado cuando [...]
+  - Describa la solución que le gustaría: Una descripción clara y concisa de lo que quieras que suceda.
+  - Describa las alternativas que haya considerado: una descripción clara y concisa de cualquier solución o característica alternativa que haya considerado.
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+**Contexto adicional**
+Agregue aquí cualquier otro contexto o capturas de pantalla sobre la solicitud de la característica.
