@@ -264,6 +264,8 @@
                 decideSend(evt) {
                     evt.preventDefault();
                     var v = this.decideEncrypt();
+                    var x = window.confirm("¿Está seguro de su elección?");
+                    if (x == true) {
                     var data = {
                         vote: {a: v.alpha.toString(), b: v.beta.toString()},
                         voting: this.voting.id,
@@ -280,6 +282,7 @@
                             this.succesVote = false;
                             this.showAlert("danger", '{% trans "Error: " %}' + error);
                         });
+                    }
                 },
                 showAlert(lvl, msg) {
                     this.alertLvl = lvl;
