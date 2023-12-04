@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from .validators import validador_palabras_ofensivas
 from .models import Question, QuestionOption, Voting
 from base.serializers import KeySerializer, AuthSerializer
 
@@ -12,9 +12,14 @@ class QuestionOptionSerializer(serializers.HyperlinkedModelSerializer):
 
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     options = QuestionOptionSerializer(many=True)
+
     class Meta:
         model = Question
         fields = ('desc', 'options')
+
+    def validate_desc(self, value):
+        validador_palabras_ofensivas(value)
+        return value
 
 
 class VotingSerializer(serializers.HyperlinkedModelSerializer):

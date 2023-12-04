@@ -2,13 +2,14 @@ from django.db import models
 from django.db.models import JSONField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from .validators import validador_palabras_ofensivas
 
 from base import mods
 from base.models import Auth, Key
 
 
 class Question(models.Model):
-    desc = models.TextField()
+    desc = models.TextField(validators=[validador_palabras_ofensivas])
 
     def __str__(self):
         return self.desc
@@ -30,7 +31,7 @@ class QuestionOption(models.Model):
 
 class Voting(models.Model):
     name = models.CharField(max_length=200)
-    desc = models.TextField(blank=True, null=True)
+    desc = models.TextField(blank=True, null=True, validators=[validador_palabras_ofensivas])
     question = models.ForeignKey(Question, related_name='voting', on_delete=models.CASCADE)
 
     start_date = models.DateTimeField(blank=True, null=True)

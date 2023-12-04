@@ -1,8 +1,20 @@
 from django.core.exceptions import ValidationError
+import re
+import unicodedata
+from django.utils.translation import gettext_lazy
 
-OFFENSIVE_WORDS = ["word1", "word2", "word3"]  # Agrega tus palabras ofensivas aquí
+OFFENSIVE_WORDS = ["gilipollas", "lameculos", "idiota", "subnormal", "puto", "puta", "imbécil", "imbecil",
+                    "cabrón", "cabrona", "pendejo", "estúpido", "estupido", "memo", "necio",
+                    "tonto"] 
 
-def validate_no_offensive_words(value):
+def borrar_acentos(value):
+    nfkd_form = unicodedata.normalize('NFKD', value)
+    return ''.join([c for c in nfkd_form if not unicodedata.combining(c)])
+
+
+def validador_palabras_ofensivas(value):
+    values_sin_acentos = borrar_acentos(value.lower())
     for word in OFFENSIVE_WORDS:
-        if word.lower() in value.lower():
-            raise ValidationError("La palabra ofensiva '%(word)s' no está permitida.")
+        if borrar_acentos(word.lower()) in values_sin_acentos:
+            raise ValidationError(gettext_lazy("La palabra '%(word)s' no está permitida."),
+            params={'word': word},)
