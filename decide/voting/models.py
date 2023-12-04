@@ -12,12 +12,8 @@ from base.models import Auth, Key
 class Question(models.Model):
     desc = models.TextField(validators=[validador_palabras_ofensivas])
 
-    def save(self, *args, **kwargs):
-        try:
-            validador_palabras_ofensivas(self.desc)
-            super().save(*args, **kwargs)
-        except ValidationError:
-            raise ValidationError("Se ha detectado lenguaje ofensivo")
+    def clean(self):
+        validador_palabras_ofensivas(self.desc)
 
     def __str__(self):
         return self.desc
@@ -33,12 +29,8 @@ class QuestionOption(models.Model):
             self.number = self.question.options.count() + 2
         return super().save()
 
-    def clean(self, *args, **kwargs):
-        try:
-            validador_palabras_ofensivas(self.option)
-            super().save(*args, **kwargs)
-        except ValidationError:
-            raise ValidationError("Se ha detectado lenguaje ofensivo")
+    def clean(self):
+        validador_palabras_ofensivas(self.option)
 
     def __str__(self):
         return '{} ({})'.format(self.option, self.number)
@@ -145,13 +137,9 @@ class Voting(models.Model):
         self.postproc = postp
         self.save()
 
-    def save(self, *args, **kwargs):
-        try:
-            validador_palabras_ofensivas(self.name)
-            validador_palabras_ofensivas(self.desc)
-            super().save(*args, **kwargs)
-        except ValidationError:
-            raise ValidationError("Se ha detectado lenguaje ofensivo")
+    def clean(self):
+        validador_palabras_ofensivas(self.name)
+        validador_palabras_ofensivas(self.desc)
 
     def __str__(self):
         return self.name

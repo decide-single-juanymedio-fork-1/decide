@@ -223,14 +223,14 @@ class VotingTestCase(BaseTestCase):
 
     def test_voting_name_and_desc_validator(self):
         question = Question(desc="Esta es una pregunta sin palabras ofensivas")
-        question.save()
+        question.clean()
 
         voting = Voting(
             name="Votación sin palabras ofensivas",
             desc="Descripción de votación sin palabras ofensivas",
             question=question
         )
-        voting.save()
+        voting.clean()
 
         voting_with_offensive_name = Voting(
             name="Votación con una palabra ofensiva: idiota",
@@ -238,7 +238,7 @@ class VotingTestCase(BaseTestCase):
             question=question
         )
         with self.assertRaises(ValidationError):
-            voting_with_offensive_name.save()
+            voting_with_offensive_name.clean()
 
         voting_with_offensive_desc = Voting(
             name="Votación sin palabras ofensivas",
@@ -246,7 +246,7 @@ class VotingTestCase(BaseTestCase):
             question=question
         )
         with self.assertRaises(ValidationError):
-            voting_with_offensive_desc.save()
+            voting_with_offensive_desc.clean()
 
 class LogInSuccessTests(StaticLiveServerTestCase):
 
@@ -397,16 +397,16 @@ class QuestionsTests(StaticLiveServerTestCase):
 
     def test_question_desc_validator(self):
         pregunta = Question(desc="Esta es una pregunta sin palabras ofensivas")
-        pregunta.save()
+        pregunta.clean()
 
         pregunta_ofensiva = Question(desc="Esta es una pregunta con una palabra ofensiva: cabrona")
         with self.assertRaises(ValidationError):
-            pregunta_ofensiva.save()
+            pregunta_ofensiva.clean()
 
     
     def test_question_option_validator(self):
         question = Question(desc="Esta es una pregunta sin palabras ofensivas")
-        question.save()
+        question.clean()
 
         option = QuestionOption(question=question, option="Opción sin palabras ofensivas")
         option.clean()
