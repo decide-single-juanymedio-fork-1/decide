@@ -18,7 +18,7 @@ class Question(models.Model):
 class QuestionOption(models.Model):
     question = models.ForeignKey(Question, related_name='options', on_delete=models.CASCADE)
     number = models.PositiveIntegerField(blank=True, null=True)
-    option = models.TextField()
+    option = models.TextField(validators=[validador_palabras_ofensivas])
 
     def save(self):
         if not self.number:
@@ -30,7 +30,7 @@ class QuestionOption(models.Model):
 
 
 class Voting(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, validators=[validador_palabras_ofensivas])
     desc = models.TextField(blank=True, null=True, validators=[validador_palabras_ofensivas])
     question = models.ForeignKey(Question, related_name='voting', on_delete=models.CASCADE)
 
