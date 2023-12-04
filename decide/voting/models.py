@@ -3,6 +3,7 @@ from django.db.models import JSONField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .validators import validador_palabras_ofensivas
+from django.core.exceptions import ValidationError
 
 from base import mods
 from base.models import Auth, Key
@@ -10,6 +11,13 @@ from base.models import Auth, Key
 
 class Question(models.Model):
     desc = models.TextField(validators=[validador_palabras_ofensivas])
+
+    def save(self, *args, **kwargs):
+        try:
+            validador_palabras_ofensivas(self.desc)
+            super().save(*args, **kwargs)
+        except ValidationError:
+            raise ValidationError("Se ha detectado lenguaje ofensivo")
 
     def __str__(self):
         return self.desc
@@ -24,6 +32,13 @@ class QuestionOption(models.Model):
         if not self.number:
             self.number = self.question.options.count() + 2
         return super().save()
+
+    def clean(self, *args, **kwargs):
+        try:
+            validador_palabras_ofensivas(self.option)
+            super().save(*args, **kwargs)
+        except ValidationError:
+            raise ValidationError("Se ha detectado lenguaje ofensivo")
 
     def __str__(self):
         return '{} ({})'.format(self.option, self.number)
@@ -129,6 +144,14 @@ class Voting(models.Model):
 
         self.postproc = postp
         self.save()
+
+    def save(self, *args, **kwargs):
+        try:
+            validador_palabras_ofensivas(self.name)
+            validador_palabras_ofensivas(self.desc)
+            super().save(*args, **kwargs)
+        except ValidationError:
+            raise ValidationError("Se ha detectado lenguaje ofensivo")
 
     def __str__(self):
         return self.name

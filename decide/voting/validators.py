@@ -13,8 +13,11 @@ def borrar_acentos(value):
 
 
 def validador_palabras_ofensivas(value):
-    values_sin_acentos = borrar_acentos(value.lower())
-    for word in OFFENSIVE_WORDS:
-        if borrar_acentos(word.lower()) in values_sin_acentos:
-            raise ValidationError(gettext_lazy("La palabra '%(word)s' no está permitida."),
-            params={'word': word},)
+    if value is not None:
+        values_sin_acentos = borrar_acentos(value.lower())
+        palabras_ofensivas = []
+        for word in OFFENSIVE_WORDS:
+            if borrar_acentos(word.lower()) in values_sin_acentos:
+                palabras_ofensivas.append(word)
+        if palabras_ofensivas:
+            raise ValidationError(f"Las palabras {', '.join(palabras_ofensivas)} no están permitidas.")
