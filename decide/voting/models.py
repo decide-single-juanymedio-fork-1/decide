@@ -2,13 +2,18 @@ from django.db import models
 from django.db.models import JSONField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from .validators import validador_palabras_ofensivas
+from django.core.exceptions import ValidationError
 
 from base import mods
 from base.models import Auth, Key
 
 
 class Question(models.Model):
-    desc = models.TextField()
+    desc = models.TextField(validators=[validador_palabras_ofensivas])
+
+    def clean(self):
+        validador_palabras_ofensivas(self.desc)
 
     def __str__(self):
         return self.desc
@@ -17,20 +22,23 @@ class Question(models.Model):
 class QuestionOption(models.Model):
     question = models.ForeignKey(Question, related_name='options', on_delete=models.CASCADE)
     number = models.PositiveIntegerField(blank=True, null=True)
-    option = models.TextField()
+    option = models.TextField(validators=[validador_palabras_ofensivas])
 
     def save(self):
         if not self.number:
             self.number = self.question.options.count() + 2
         return super().save()
 
+    def clean(self):
+        validador_palabras_ofensivas(self.option)
+
     def __str__(self):
         return '{} ({})'.format(self.option, self.number)
 
 
 class Voting(models.Model):
-    name = models.CharField(max_length=200)
-    desc = models.TextField(blank=True, null=True)
+    name = models.CharField(max_length=200, validators=[validador_palabras_ofensivas])
+    desc = models.TextField(blank=True, null=True, validators=[validador_palabras_ofensivas])
     question = models.ForeignKey(Question, related_name='voting', on_delete=models.CASCADE)
 
     start_date = models.DateTimeField(blank=True, null=True)
@@ -128,6 +136,10 @@ class Voting(models.Model):
 
         self.postproc = postp
         self.save()
+
+    def clean(self):
+        validador_palabras_ofensivas(self.name)
+        validador_palabras_ofensivas(self.desc)
 
     def __str__(self):
         return self.name

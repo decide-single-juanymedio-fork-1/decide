@@ -7,6 +7,8 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
+from django.core.exceptions import ValidationError
+from .validators import validador_palabras_ofensivas
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -216,6 +218,35 @@ class VotingTestCase(BaseTestCase):
         response = self.client.put('/voting/{}/'.format(voting.pk), data, format='json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), 'Voting already tallied')
+    
+
+
+    def test_voting_name_and_desc_validator(self):
+        question = Question(desc="Esta es una pregunta sin palabras ofensivas")
+        question.clean()
+
+        voting = Voting(
+            name="Votación sin palabras ofensivas",
+            desc="Descripción de votación sin palabras ofensivas",
+            question=question
+        )
+        voting.clean()
+
+        voting_with_offensive_name = Voting(
+            name="Votación con una palabra ofensiva: idiota",
+            desc="Descripción de votación sin palabras ofensivas",
+            question=question
+        )
+        with self.assertRaises(ValidationError):
+            voting_with_offensive_name.clean()
+
+        voting_with_offensive_desc = Voting(
+            name="Votación sin palabras ofensivas",
+            desc="Descripción de votación con una palabra ofensiva: idiota",
+            question=question
+        )
+        with self.assertRaises(ValidationError):
+            voting_with_offensive_desc.clean()
 
 class LogInSuccessTests(StaticLiveServerTestCase):
 
@@ -343,6 +374,7 @@ class QuestionsTests(StaticLiveServerTestCase):
 
         self.assertTrue(self.cleaner.current_url == self.live_server_url+"/admin/voting/question/")
 
+
     def createCensusEmptyError(self):
         self.cleaner.get(self.live_server_url+"/admin/login/?next=/admin/")
         self.cleaner.set_window_size(1280, 720)
@@ -361,3 +393,48 @@ class QuestionsTests(StaticLiveServerTestCase):
 
         self.assertTrue(self.cleaner.find_element_by_xpath('/html/body/div/div[3]/div/div[1]/div/form/div/p').text == 'Please correct the errors below.')
         self.assertTrue(self.cleaner.current_url == self.live_server_url+"/admin/voting/question/add/")
+
+
+    def test_question_desc_validator(self):
+        pregunta = Question(desc="Esta es una pregunta sin palabras ofensivas")
+        pregunta.clean()
+
+        pregunta_ofensiva = Question(desc="Esta es una pregunta con una palabra ofensiva: cabrona")
+        with self.assertRaises(ValidationError):
+            pregunta_ofensiva.clean()
+
+    
+    def test_question_option_validator(self):
+        question = Question(desc="Esta es una pregunta sin palabras ofensivas")
+        question.clean()
+
+        option = QuestionOption(question=question, option="Opción sin palabras ofensivas")
+        option.clean()
+
+        option_with_offensive_text = QuestionOption(question=question, option="Opción con una palabra ofensiva: idiota")
+        with self.assertRaises(ValidationError):
+            option_with_offensive_text.clean()
+
+class ValidatorsTest(TestCase):
+
+    def test_validador_palabras_ofensivas_validator_negativo(self):
+        with self.assertRaises(ValidationError) as context:
+            validador_palabras_ofensivas("Eres un gilipollas")
+        self.assertEqual(
+            context.exception.message,
+            "Las palabras gilipollas no están permitidas."
+        )
+
+    def test_validator_palabras_ofensivas_validator_negativo_con_acentos(self):
+        with self.assertRaises(ValidationError) as context:
+            validador_palabras_ofensivas("Tú eres un imbécil")
+        self.assertEqual(
+            context.exception.message,
+            "Las palabras imbécil, imbecil no están permitidas."
+        )
+
+    def test_validator_palabras_ofensivas_validator_negativo_varias_palabras(self):
+        with self.assertRaises(ValidationError) as context:
+            validador_palabras_ofensivas("Este texto contiene las palabras puto y idiota.")
+        self.assertIn("puto", context.exception.message)
+        self.assertIn("idiota", context.exception.message)
