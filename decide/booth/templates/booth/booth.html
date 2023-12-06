@@ -31,8 +31,8 @@
                     </li>
                     <li class="nav-item" v-if="signup">
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#registerUserModal">
-                            Register
+                        <button type="button" class="btn btn-secondary" >
+                           <a href="http://localhost:8080/booth/register/">Register</a>
                         </button>
                     </li>
                 </ul>
@@ -118,42 +118,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="registerUserModal" tabindex="-1" aria-labelledby="registerUserModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="registerUserModalLabel">Register</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <!-- Register user Form -->
-                            <form id="registrationForm" onsubmit="return onSubmitRegistration()">
-                                <div class="form-group mt-2">
-                                    <label for="username">Username:</label>
-                                    <input
-                                        class="ml-2 form-control"
-                                        id="username"
-                                        type="text"
-                                        name="username"
-                                        autocomplete="username"
-                                        required />
-                                </div>
-                                <div class="form-group mt-1">
-                                    <label for="password">Password:</label>
-                                    <input
-                                        class="form-control"
-                                        id="password"
-                                        type="password"
-                                        name="password"
-                                        autocomplete="new-password"
-                                        required />
-                                </div>
-                                <button class="btn btn-primary mt-3" type="submit" data-bs-dismiss="modal">Register</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
 
         <!-- Voting -->
@@ -193,16 +158,10 @@
     <script src="{% static "crypto/elgamal.js" %}"></script>
 
     <!-- Vuejs -->
-    <script src="https://unpkg.com/vue@latest"</script>
+    <script src="https://unpkg.com/vue@latest"></script>
     <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap@5.2.2/dist/js/bootstrap.js"></script>
-    <script>
-        function onSubmitRegistration() {
-            // Add your registration logic here
-            alert('User registered successfully!');
-            return false; // Prevents the form from submitting (for demonstration purposes)
-        }
-    </script>
+    
     <script>
         const { createApp } = Vue
         var voting = {{voting|safe}};

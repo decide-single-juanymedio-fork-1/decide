@@ -4,4 +4,6 @@ from .views import BoothView
 
 urlpatterns = [
     path('<int:voting_id>/', BoothView.as_view()),
+    path('register/', BoothView.registerPage, name='register'),
 ]
+

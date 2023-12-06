@@ -2,8 +2,13 @@ import json
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.http import Http404
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
+
 
 from base import mods
+
 
 
 # TODO: check permissions and census
@@ -28,3 +33,15 @@ class BoothView(TemplateView):
         context['KEYBITS'] = settings.KEYBITS
 
         return context
+
+
+    def registerPage(request):
+        if request.method=='POST':
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('/booth/1/')
+        else:
+            form = UserCreationForm()
+        return render(request, 'register.html')
+#{'form':form}, context_instance=RequestContext(request))
