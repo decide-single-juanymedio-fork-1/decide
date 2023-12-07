@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import BoothView
+from .views import BoothView, StaticViews
 
 
 urlpatterns = [
     path('<int:voting_id>/', BoothView.as_view()),
     path('register/', BoothView.registerPage, name='register'),
+    path('thanks/', StaticViews.GiveThanks),
 ]
 

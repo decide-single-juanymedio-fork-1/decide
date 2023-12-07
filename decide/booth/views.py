@@ -8,6 +8,8 @@ from django.shortcuts import render, redirect
 
 
 from base import mods
+from .models import *
+from .forms import OrderForm, CreateUserForm
 
 
 
@@ -37,11 +39,15 @@ class BoothView(TemplateView):
 
     def registerPage(request):
         if request.method=='POST':
-            form = UserCreationForm(request.POST)
+            form = CreateUserForm(request.POST)
             if form.is_valid():
                 form.save()
-                return redirect('/booth/1/')
+                return redirect('/booth/thanks/')
         else:
-            form = UserCreationForm()
-        return render(request, 'register.html')
-#{'form':form}, context_instance=RequestContext(request))
+            form = CreateUserForm()
+        return render(request, 'register.html',{"form": form})
+
+class StaticViews(TemplateView):
+    template_name = 'thanks.html'
+    def GiveThanks(request):
+        return render(request,'thanks.html')
