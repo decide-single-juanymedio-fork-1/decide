@@ -29,6 +29,12 @@
                             Login
                         </button>
                     </li>
+                    <li class="nav-item" v-if="signup">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-secondary" >
+                           <a href="{% url 'register' %}">Register</a>
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -112,6 +118,7 @@
                     </div>
                 </div>
             </div>
+            
         </div>
 
         <!-- Voting -->
@@ -151,10 +158,10 @@
     <script src="{% static "crypto/elgamal.js" %}"></script>
 
     <!-- Vuejs -->
-    <script src="https://unpkg.com/vue@latest"</script>
+    <script src="https://unpkg.com/vue@latest"></script>
     <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap@5.2.2/dist/js/bootstrap.js"></script>
-
+    
     <script>
         const { createApp } = Vue
         var voting = {{voting|safe}};

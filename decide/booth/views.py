@@ -2,8 +2,15 @@ import json
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.http import Http404
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
+
 
 from base import mods
+from .models import *
+from .forms import OrderForm, CreateUserForm
+
 
 
 # TODO: check permissions and census
@@ -28,3 +35,19 @@ class BoothView(TemplateView):
         context['KEYBITS'] = settings.KEYBITS
 
         return context
+
+
+    def registerPage(request):
+        if request.method=='POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('thanks')
+        else:
+            form = CreateUserForm()
+        return render(request, 'register.html',{"form": form})
+
+class StaticViews(TemplateView):
+    template_name = 'thanks.html'
+    def GiveThanks(request):
+        return render(request,'thanks.html')
