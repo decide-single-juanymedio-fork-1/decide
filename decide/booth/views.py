@@ -42,7 +42,7 @@ class BoothView(TemplateView):
             form = CreateUserForm(request.POST)
             if form.is_valid():
                 form.save()
-                return redirect('/booth/thanks/')
+                return redirect('thanks')
         else:
             form = CreateUserForm()
         return render(request, 'register.html',{"form": form})
