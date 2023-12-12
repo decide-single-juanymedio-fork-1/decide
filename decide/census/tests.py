@@ -1,6 +1,7 @@
 import random
 import io
 import csv
+from django.db import IntegrityError, transaction
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
@@ -196,27 +197,36 @@ class CensusExportTestCase(APITestCase):
 
 class ImportarCensoTestCase(APITestCase):
     def setUp(self):
-        # Crea un usuario administrador para el test
         self.admin_user = User.objects.create_user(username='admin', password='adminpass', is_staff=True)
 
-    def tearDown(self):
-        Census.objects.all().delete()
-
     def test_import_census_success(self):
-        # Iniciar sesión como administrador
-        self.client.force_login(self.admin_user)
 
-        # Crear un archivo CSV de prueba con datos válidos
+        self.client.force_login(self.admin_user)
         csv_content = "Votacion ID,Votante ID\n1,100\n2,101\n3,102"
         csv_file = SimpleUploadedFile("census.csv", csv_content.encode())
 
-        # Hacer una solicitud POST a la vista de importación de censo
         response = self.client.post(reverse('importar_censo'), {'archivo': csv_file})
-
-        # Verificar que la respuesta sea un código de estado 201
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-        # Verificar que el censo se haya creado correctamente
         self.assertEqual(Census.objects.count(), 3)
 
-        # Puedes agregar más aserciones según tus necesidades específicas
+    def test_import_census_invalid_file_format(self):
+        self.client.force_login(self.admin_user)
+
+        txt_content = "Este no es un archivo CSV."
+        txt_file = SimpleUploadedFile("not_csv.txt", txt_content.encode())
+        response = self.client.post(reverse('importar_censo'), {'archivo': txt_file})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Census.objects.count(), 0)
+
+    def test_import_census_integrity_error(self):
+        self.client.force_login(self.admin_user)
+
+        csv_content = "Votacion ID,Votante ID\n1,104\n1,104\n1,104"
+        csv_file = SimpleUploadedFile("census_with_duplicate.csv", csv_content.encode())
+
+        response = self.client.post(reverse('importar_censo'), {'archivo': csv_file})
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
+
+
+

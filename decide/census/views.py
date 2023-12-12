@@ -95,7 +95,7 @@ class ImportCensus(View):
                         Census.objects.create(voting_id=voting_id, voter_id=voter_id)
                     return JsonResponse({'mensaje': 'Censos importados con éxito'}, status=ST_201)
                 except IntegrityError:
-                    return JsonResponse({'mensaje': 'Error al intentar crear el censo'}, status=ST_409)
+                    return JsonResponse({'mensaje': 'Error ya hay un censo con ese id de votacion y ese id de votante'}, status=ST_409)
             else:
                 return JsonResponse({'error': 'El archivo que intentas importar no tiene el formato correcto'}, status=400)
         else:
