@@ -33,8 +33,8 @@ class BoothTestCase(BaseTestCase):
     def test_post_success(self):
         response = self.client.post("/booth/register/", data={
             'username': 'EGCuser1',
-            "password1": "EGCenjoyer1",
-            "password2": "EGCenjoyer1"
+            'password1': 'EGCenjoyer1',
+            'password2': 'EGCenjoyer1'
         })
 
         self.assertEqual(response["Location"], "/booth/thanks/")
@@ -42,11 +42,19 @@ class BoothTestCase(BaseTestCase):
     def test_forms(self):
         form_test = CreateUserForm(data={
             'username': 'EGCuser1',
-            "password1": "EGCenjoyer1",
-            "password2": "EGCenjoyer1"
+            'password1': 'EGCenjoyer1',
+            'password2': 'EGCenjoyer1'
         })
         self.assertTrue(form_test.is_valid())
 
     def test_forms_empty(self):
         form_test = CreateUserForm(data={})
+        self.assertFalse(form_test.is_valid())
+
+    def test_forms_wrong(self):
+        form_test = CreateUserForm(data = {
+            'username': 'EGCuser2',
+            'password1': 'EGCenjoyer1',
+            'password2': 'olvidelapassword'
+        })
         self.assertFalse(form_test.is_valid())

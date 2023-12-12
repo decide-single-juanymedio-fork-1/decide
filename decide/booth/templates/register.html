@@ -119,4 +119,14 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		var form_fields = document.getElementsByTagName('input')
+		form_fields[1].placeholder='Username...';
+		form_fields[2].placeholder='Contraseña...';
+		form_fields[3].placeholder='Repita la contraseña...';
+		
+		for (var field in form_fields){
+			form_fields[field].className += ' form-control '
+		}
+	</script>
 </body>
