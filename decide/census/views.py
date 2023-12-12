@@ -1,7 +1,9 @@
 from django.db.utils import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.decorators import user_passes_test
 import csv
 from django.http import HttpResponse, JsonResponse
+from django.utils.decorators import method_decorator
 from .forms import ImportarCensoForm
 from django.shortcuts import render
 from rest_framework import generics
@@ -19,6 +21,8 @@ from rest_framework.status import (
 from base.perms import UserIsStaff
 from .models import Census
 
+def is_admin_user(user):
+    return user.is_authenticated and user.is_staff
 
 class CensusCreate(generics.ListCreateAPIView):
     permission_classes = (UserIsStaff,)
@@ -73,8 +77,8 @@ class CensusExport(generics.ListAPIView):
             csv_writer.writerow([censo.voting_id, censo.voter_id])
         return response
 
+@method_decorator(user_passes_test(is_admin_user), name='dispatch')
 class ImportCensus(View):
-    permission_classes = [IsAdminUser]
     template_name = 'importar_censo.html'
 
     def get(self, request, *args, **kwargs):

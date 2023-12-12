@@ -185,6 +185,7 @@ class CensusExportTestCase(APITestCase):
         Census.objects.create(voting_id=1, voter_id=103)
 
     def test_export_census_csv(self):
+        self.client.force_authenticate(user=self.admin_user)
         url = reverse('exportar_censo')
         response = self.client.get(url, {'voting_id': 1})
 
