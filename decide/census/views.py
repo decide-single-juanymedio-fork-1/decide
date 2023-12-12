@@ -1,11 +1,12 @@
 from django.db.utils import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 import csv
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .forms import ImportarCensoForm
 from django.shortcuts import render
 from rest_framework import generics
-from django.http import JsonResponse
+from django.views import View
+from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework.status import (
         HTTP_201_CREATED as ST_201,
@@ -72,10 +73,15 @@ class CensusExport(generics.ListAPIView):
             csv_writer.writerow([censo.voting_id, censo.voter_id])
         return response
 
-
-def importar_censo(request):
+class ImportCensus(View):
     permission_classes = [IsAdminUser]
-    if request.method == 'POST':
+    template_name = 'importar_censo.html'
+
+    def get(self, request, *args, **kwargs):
+        form = ImportarCensoForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
         form = ImportarCensoForm(request.POST, request.FILES)
         if form.is_valid():
             archivo = form.cleaned_data['archivo']
@@ -83,7 +89,7 @@ def importar_censo(request):
                 try:
                     contenido_texto = archivo.read().decode('utf-8').splitlines()
                     csv_reader = csv.reader(contenido_texto)
-                    next(csv_reader)
+                    encabezados = next(csv_reader)
                     for row in csv_reader:
                         voting_id, voter_id = row
                         Census.objects.create(voting_id=voting_id, voter_id=voter_id)
@@ -92,7 +98,7 @@ def importar_censo(request):
                     return JsonResponse({'mensaje': 'Error al intentar crear el censo'}, status=ST_409)
             else:
                 return JsonResponse({'error': 'El archivo que intentas importar no tiene el formato correcto'}, status=400)
-    else:
-        form = ImportarCensoForm()
+        else:
+            form = ImportarCensoForm()
 
-    return render(request, 'importar_censo.html', {'form': form})
+        return render(request, 'importar_censo.html', {'form': form})

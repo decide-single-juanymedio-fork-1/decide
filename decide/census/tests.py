@@ -1,7 +1,10 @@
 import random
+import io
+import csv
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
+from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -13,6 +16,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
 from .models import Census
+from .forms import ImportarCensoForm
 from base import mods
 from base.tests import BaseTestCase
 from datetime import datetime
@@ -189,3 +193,30 @@ class CensusExportTestCase(APITestCase):
         expected_csv_content = 'Votacion ID,Votante ID\n1,101\n1,102\n1,103\n'
         actual_csv_content = response.content.decode('utf-8').replace('\r\n', '\n')
         self.assertEqual(actual_csv_content, expected_csv_content)
+
+class ImportarCensoTestCase(APITestCase):
+    def setUp(self):
+        # Crea un usuario administrador para el test
+        self.admin_user = User.objects.create_user(username='admin', password='adminpass', is_staff=True)
+
+    def tearDown(self):
+        Census.objects.all().delete()
+
+    def test_import_census_success(self):
+        # Iniciar sesión como administrador
+        self.client.force_login(self.admin_user)
+
+        # Crear un archivo CSV de prueba con datos válidos
+        csv_content = "Votacion ID,Votante ID\n1,100\n2,101\n3,102"
+        csv_file = SimpleUploadedFile("census.csv", csv_content.encode())
+
+        # Hacer una solicitud POST a la vista de importación de censo
+        response = self.client.post(reverse('importar_censo'), {'archivo': csv_file})
+
+        # Verificar que la respuesta sea un código de estado 201
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # Verificar que el censo se haya creado correctamente
+        self.assertEqual(Census.objects.count(), 3)
+
+        # Puedes agregar más aserciones según tus necesidades específicas
