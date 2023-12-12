@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 import csv
 from django.http import HttpResponse
 
@@ -23,6 +23,7 @@ class CensusAdmin(admin.ModelAdmin):
         return response
 
     exportar_censo.short_description = 'Exportar censo'
+
 
 
 admin.site.register(Census, CensusAdmin)

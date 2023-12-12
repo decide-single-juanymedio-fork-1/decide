@@ -2,8 +2,10 @@ from django.db.utils import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 import csv
 from django.http import HttpResponse
+from .forms import ImportarCensoForm
+from django.shortcuts import render
 from rest_framework import generics
-from rest_framework.response import Response
+from django.http import JsonResponse
 from rest_framework.permissions import IsAdminUser
 from rest_framework.status import (
         HTTP_201_CREATED as ST_201,
@@ -69,3 +71,28 @@ class CensusExport(generics.ListAPIView):
         for censo in census_data:
             csv_writer.writerow([censo.voting_id, censo.voter_id])
         return response
+
+
+def importar_censo(request):
+    permission_classes = [IsAdminUser]
+    if request.method == 'POST':
+        form = ImportarCensoForm(request.POST, request.FILES)
+        if form.is_valid():
+            archivo = form.cleaned_data['archivo']
+            if archivo and archivo.name.endswith('.csv'):
+                try:
+                    contenido_texto = archivo.read().decode('utf-8').splitlines()
+                    csv_reader = csv.reader(contenido_texto)
+                    next(csv_reader)
+                    for row in csv_reader:
+                        voting_id, voter_id = row
+                        Census.objects.create(voting_id=voting_id, voter_id=voter_id)
+                    return JsonResponse({'mensaje': 'Censos importados con éxito'}, status=ST_201)
+                except IntegrityError:
+                    return JsonResponse({'mensaje': 'Error al intentar crear el censo'}, status=ST_409)
+            else:
+                return JsonResponse({'error': 'El archivo que intentas importar no tiene el formato correcto'}, status=400)
+    else:
+        form = ImportarCensoForm()
+
+    return render(request, 'importar_censo.html', {'form': form})
