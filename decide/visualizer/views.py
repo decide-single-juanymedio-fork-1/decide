@@ -17,7 +17,6 @@ class VisualizerView(TemplateView):
         try:
             r = mods.get('voting', params={'id': vid})
             voting_data = r[0]
-            
             vote_count = StoreVote.objects.filter(voting_id=vid).count()
             
             census_count = Census.objects.filter(voting_id=vid).count()
