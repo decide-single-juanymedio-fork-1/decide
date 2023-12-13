@@ -146,7 +146,6 @@ LANGUAGES = [
     ('en', ('English')),
     ('es', ('Spanish')),
     ('fr', ('French')),
-    # Otros idiomas según sea necesario
 ]
 
 LOCALE_PATHS = [

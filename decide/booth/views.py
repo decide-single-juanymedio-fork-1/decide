@@ -18,10 +18,7 @@ class BoothView(TemplateView):
     template_name = 'booth/booth.html'
 
     def get(self, request, *args, **kwargs):
-        # Obtén el nuevo idioma seleccionado por el usuario
         language = request.POST.get('language', None)
-
-        # Cambia el idioma activo si es válido
         if language and language in [lang[0] for lang in settings.LANGUAGES]:
             activate(language)
 
