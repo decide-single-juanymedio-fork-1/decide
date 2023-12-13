@@ -5,7 +5,7 @@ from django.http import Http404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
-
+from django.utils.translation import activate
 
 from base import mods
 from .models import *
@@ -16,6 +16,14 @@ from .forms import OrderForm, CreateUserForm
 # TODO: check permissions and census
 class BoothView(TemplateView):
     template_name = 'booth/booth.html'
+
+    def get(self, request, *args, **kwargs):
+        language = request.POST.get('language', None)
+        if language and language in [lang[0] for lang in settings.LANGUAGES]:
+            activate(language)
+
+        return super().get(request, *args, **kwargs)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -51,3 +59,5 @@ class StaticViews(TemplateView):
     template_name = 'thanks.html'
     def GiveThanks(request):
         return render(request,'thanks.html')
+    
+
