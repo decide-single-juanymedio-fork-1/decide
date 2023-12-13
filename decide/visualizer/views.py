@@ -18,19 +18,19 @@ class VisualizerView(TemplateView):
             r = mods.get('voting', params={'id': vid})
             voting_data = r[0]
             vote_count = StoreVote.objects.filter(voting_id=vid).count()
-            
+
             census_count = Census.objects.filter(voting_id=vid).count()
-            
+
             if census_count > 0:
                 voting_data['voting_percentage'] = (vote_count/census_count) * 100
             else:
                 voting_data['voting_percentage'] = 0
-                
+
             voting_data['vote_count'] = vote_count
             voting_data['census_count'] = census_count
-            
+
             context['voting'] = json.dumps(voting_data)
-            
+
         except:
             raise Http404
 

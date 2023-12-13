@@ -15,7 +15,7 @@
                 <h1 class="navbar-brand">Decide</h1>
             </div>
         </nav>
-          
+
 
         <div class="voting container">
             <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
@@ -33,7 +33,7 @@
                     <tbody>
                         <tr>
                             <th>[[ voting.vote_count ]]</th>
-                            <td>[[ voting.voting_percentage.toFixed(2) ]]</td>
+                            <td>[[ voting.voting_percentage.toFixed(2) ]]%</td>
                         </tr>
                     </tbody>
                 </table>
@@ -54,6 +54,22 @@
                             <th>[[opt.option]]</th>
                             <td>[[opt.postproc]]</td>
                             <td class="text-muted">[[opt.votes]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2 class="heading">Estadisticas:</h2>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Número de votos total</th>
+                            <th>Porcentaje del censo que ha votado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>[[ voting.vote_count ]]</th>
+                            <td>[[ voting.voting_percentage.toFixed(2) ]]%</td>
                         </tr>
                     </tbody>
                 </table>
