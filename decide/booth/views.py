@@ -59,5 +59,3 @@ class StaticViews(TemplateView):
     template_name = 'thanks.html'
     def GiveThanks(request):
         return render(request,'thanks.html')
-    
-
