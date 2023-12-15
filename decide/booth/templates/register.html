@@ -90,6 +90,12 @@
 							</div>
 							{{form.username}}
 						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-envelope"></i></span>
+							</div>
+							{{form.email}}
+						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fas fa-key"></i></span>
@@ -122,8 +128,9 @@
 	<script>
 		var form_fields = document.getElementsByTagName('input')
 		form_fields[1].placeholder='Username...';
-		form_fields[2].placeholder='Contraseña...';
-		form_fields[3].placeholder='Repita la contraseña...';
+		form_fields[2].placeholder='Correo electrónico...';
+		form_fields[3].placeholder='Contraseña...';
+		form_fields[4].placeholder='Repita la contraseña...';
 		
 		for (var field in form_fields){
 			form_fields[field].className += ' form-control '

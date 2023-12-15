@@ -33,6 +33,7 @@ class BoothTestCase(BaseTestCase):
     def test_post_success(self):
         response = self.client.post("/booth/register/", data={
             'username': 'EGCuser1',
+            'email': 'egcuser1@email.com',
             'password1': 'EGCenjoyer1',
             'password2': 'EGCenjoyer1'
         })
@@ -42,6 +43,7 @@ class BoothTestCase(BaseTestCase):
     def test_forms(self):
         form_test = CreateUserForm(data={
             'username': 'EGCuser1',
+            'email': 'egcuser1@email.com',
             'password1': 'EGCenjoyer1',
             'password2': 'EGCenjoyer1'
         })
@@ -54,6 +56,7 @@ class BoothTestCase(BaseTestCase):
     def test_forms_wrong(self):
         form_test = CreateUserForm(data = {
             'username': 'EGCuser2',
+            'email': 'egcuser2@email.com',
             'password1': 'EGCenjoyer1',
             'password2': 'olvidelapassword'
         })
