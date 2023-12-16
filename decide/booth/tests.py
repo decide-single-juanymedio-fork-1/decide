@@ -69,7 +69,6 @@ class BoothTestCase(BaseTestCase):
         data = {'username': 'testuser', 'password': 'testpassword'}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 302)  # 302: Redirección al inicio de sesión exitoso
-
     def test_login_unsuccessful(self):
         # Prueba de inicio de sesión fallido con credenciales inválidas
         url = reverse('login')
