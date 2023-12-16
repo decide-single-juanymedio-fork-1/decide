@@ -4,8 +4,10 @@ from django.conf import settings
 from django.http import Http404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.utils.translation import activate
+from django.contrib import messages
 
 from base import mods
 from .models import *
@@ -54,6 +56,23 @@ class BoothView(TemplateView):
         else:
             form = CreateUserForm()
         return render(request, 'register.html',{"form": form})
+    
+    def loginPage(request):
+        if request.method=='POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('thanks')
+            else:
+                messages.info(request, 'Nombre de usuario o contraseña incorrectos')
+        return render(request, 'login.html',{"form": form})
+    
+    def logoutUser(request):
+        logout(request)
+        return redirect('login')
 
 class StaticViews(TemplateView):
     template_name = 'thanks.html'
