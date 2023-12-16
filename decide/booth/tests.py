@@ -65,7 +65,7 @@ class BoothTestCase(BaseTestCase):
 
     def test_login_successful(self):
         # Prueba de inicio de sesión exitoso con credenciales válidas
-        url = reverse('login')  
+        url = reverse('login')
         data = {'username': 'testuser', 'password': 'testpassword'}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 302)  # 302: Redirección al inicio de sesión exitoso
@@ -84,7 +84,7 @@ class BoothTestCase(BaseTestCase):
         data = {'username': 'testuser', 'password': 'testpassword'}
         response = self.client.post(url, data)
 
-        url = reverse('logout')  
+        url = reverse('logout')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)  # 302: Redirección al cierre de sesión
 

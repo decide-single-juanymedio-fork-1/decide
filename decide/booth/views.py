@@ -68,7 +68,7 @@ class BoothView(TemplateView):
                 return redirect('thanks')
             else:
                 messages.info(request, 'Nombre de usuario o contraseña incorrectos')
-        return render(request, 'login.html',{"form": form})
+        return render(request, 'login.html', {})
     
     def logoutUser(request):
         logout(request)
