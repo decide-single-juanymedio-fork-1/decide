@@ -2,6 +2,8 @@ import django_filters.rest_framework
 from django.conf import settings
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
+from django.core.mail import send_mass_mail
+from django.contrib.auth.models import User
 from rest_framework import generics, status
 from rest_framework.response import Response
 
@@ -9,6 +11,7 @@ from .models import Question, QuestionOption, Voting
 from .serializers import SimpleVotingSerializer, VotingSerializer
 from base.perms import UserIsStaff
 from base.models import Auth
+from census.models import Census
 
 
 class VotingView(generics.ListCreateAPIView):
@@ -73,6 +76,24 @@ class VotingUpdate(generics.RetrieveUpdateDestroyAPIView):
                 voting.start_date = timezone.now()
                 voting.save()
                 msg = 'Voting started'
+
+                #Recuperamos los emails de los votantes asociados con la votación según el censo
+                voter_ids = Census.objects.filter(voting_id=voting.id).values_list('voter_id', flat=True)
+                voters_emails = User.objects.filter(id__in=voter_ids).values_list('email', flat=True)
+
+                #Prepara los mensajes a los emails
+                subject = 'Una votación ha empezado'
+                message = f'La votación de "{voting.name}" ha empezado.'
+                from_email = 'egcdecide9@outlook.com'
+                recipient_list = list(voters_emails)
+                message_tuple = ((subject,message, from_email, recipient_list),)
+
+                # Envia los emails
+                try:
+                    send_mass_mail(message_tuple, fail_silently=False)
+                except Exception as e:
+                    print(f"Error sending emails: {e}")
+
         elif action == 'stop':
             if not voting.start_date:
                 msg = 'Voting is not started'
@@ -97,6 +118,24 @@ class VotingUpdate(generics.RetrieveUpdateDestroyAPIView):
             else:
                 voting.tally_votes(request.auth.key)
                 msg = 'Voting tallied'
+
+                 #Recuperamos los emails de los votantes asociados con la votación según el censo
+                voter_ids = Census.objects.filter(voting_id=voting.id).values_list('voter_id', flat=True)
+                voters_emails = User.objects.filter(id__in=voter_ids).values_list('email', flat=True)
+
+                #Prepara los mensajes a los emails
+                subject = 'Resultados de votación'
+                message = f'La votación de "{voting.name}" ha finalizado. Ya puedes conocer los resultados!.'
+                from_email = 'egcdecide9@outlook.com'
+                recipient_list = list(voters_emails)
+                message_tuple = ((subject,message, from_email, recipient_list),)
+
+                # Envia los emails
+                try:
+                    send_mass_mail(message_tuple, fail_silently=False)
+                except Exception as e:
+                    print(f"Error sending emails: {e}")
+
         else:
             msg = 'Action not found, try with start, stop or tally'
             st = status.HTTP_400_BAD_REQUEST
