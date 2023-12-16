@@ -80,7 +80,7 @@ class BoothTestCase(BaseTestCase):
 
     def test_logout(self):
         # Iniciar sesión primero para realizar el cierre de sesión
-        url = reverse('login')  
+        url = reverse('login')
         data = {'username': 'testuser', 'password': 'testpassword'}
         response = self.client.post(url, data)
 
