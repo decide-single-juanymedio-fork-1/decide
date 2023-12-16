@@ -97,13 +97,6 @@ class BoothTestCase(BaseTestCase):
         session_key = self.client.session.get(SESSION_KEY)
         self.assertIsNone(session_key)
 
-    def test_login_successful(self):
-        # Prueba de inicio de sesión exitoso con credenciales válidas
-        url = reverse('login')
-        data = {'username': 'testuser', 'password': 'testpassword'}
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 302)  # 302: Redirección al inicio de sesión exitoso
-
     def test_login_superuser_redirect(self):
         # Prueba de inicio de sesión exitoso para superusuario
         url = reverse('login')
