@@ -64,8 +64,12 @@ class BoothView(TemplateView):
 
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                login(request, user)
-                return redirect('thanks')
+                if user.is_superuser:
+                    login(request, user)
+                    return redirect('/admin')
+                else:
+                    login(request, user)
+                    return redirect('thanks')
             else:
                 messages.info(request, 'Nombre de usuario o contraseña incorrectos')
         return render(request, 'login.html', {})
