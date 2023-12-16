@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.utils.translation import activate
 from django.contrib import messages
+from django.contrib.auth.models import User
 
 from base import mods
 from .models import *
@@ -16,6 +17,14 @@ from .forms import OrderForm, CreateUserForm
 
 
 # TODO: check permissions and census
+
+def get_user_by_email(user_email):
+    try:
+        user= User.objects.get(email=user_email)
+        return user.username if user else None
+    except User.DoesNotExist:
+        return None
+
 class BoothView(TemplateView):
     template_name = 'booth/booth.html'
 
@@ -59,19 +68,31 @@ class BoothView(TemplateView):
 
     def loginPage(request):
         if request.method=='POST':
-            username = request.POST.get('username')
+            username_or_email = request.POST.get('username')
             password = request.POST.get('password')
 
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                if user.is_superuser:
-                    login(request, user)
+            #Intenta autenticar con el nombre de usuario
+            user_by_username = authenticate(request, username=username_or_email, password=password)
+
+            #Intenta aunteticar con el correo electrónico
+            username_by_email = get_user_by_email(username_or_email)
+            user_by_email = authenticate(request, username=username_by_email, password=password)
+            if user_by_username is not None:
+                if user_by_username.is_superuser:
+                    login(request, user_by_username)
                     return redirect('/admin')
                 else:
-                    login(request, user)
+                    login(request, user_by_username)
+                    return redirect('thanks')
+            elif user_by_email is not None:
+                if user_by_email.is_superuser:
+                    login(request, user_by_email)
+                    return redirect('/admin')
+                else:
+                    login(request, user_by_email)
                     return redirect('thanks')
             else:
-                messages.info(request, 'Nombre de usuario o contraseña incorrectos')
+                messages.info(request, 'Nombre de usuario/correo electrónico o contraseña incorrectos')
         return render(request, 'login.html', {})
 
     def logoutUser(request):

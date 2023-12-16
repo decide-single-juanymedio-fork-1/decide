@@ -13,7 +13,7 @@ from django.contrib.auth import SESSION_KEY
 class BoothTestCase(BaseTestCase):
     def setUp(self):
         super().setUp()
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.user = User.objects.create_user(username='testuser', email='testuser@email.com', password='testpassword')
         self.superuser = User.objects.create_superuser(username='superuser', email='superuser@example.com', password='superpassword')
     def tearDown(self):
         super().tearDown()
@@ -72,8 +72,18 @@ class BoothTestCase(BaseTestCase):
         url = reverse('login')
         data = {'username': 'testuser', 'password': 'testpassword'}
         response = self.client.post(url, data)
+        expected_url = reverse('thanks')
         self.assertEqual(response.status_code, 302)  # 302: Redirección al inicio de sesión exitoso
-        self.assertRedirects(response, 'thanks')
+        self.assertRedirects(response, expected_url)
+
+    def test_login_email_successful(self):
+        # Prueba de inicio de sesión exitoso con credenciales válidas
+        url = reverse('login')
+        data = {'username': 'testuser@email.com', 'password': 'testpassword'}
+        response = self.client.post(url, data)
+        expected_url = reverse('thanks')
+        self.assertEqual(response.status_code, 302)  # 302: Redirección al inicio de sesión exitoso
+        self.assertRedirects(response, expected_url)
 
     def test_login_unsuccessful(self):
         # Prueba de inicio de sesión fallido con credenciales inválidas
@@ -81,7 +91,15 @@ class BoothTestCase(BaseTestCase):
         data = {'username': 'testuser', 'password': 'wrongpassword'}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)  # 200: Página de inicio de sesión (fallido)
-        self.assertContains(response, 'Nombre de usuario o contraseña incorrectos')
+        self.assertContains(response, 'Nombre de usuario/correo electrónico o contraseña incorrectos')
+
+    def test_login_email_unsuccessful(self):
+        # Prueba de inicio de sesión fallido con credenciales inválidas
+        url = reverse('login')
+        data = {'username': 'emailincorrecto@email.com', 'password': 'wrongpassword'}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)  # 200: Página de inicio de sesión (fallido)
+        self.assertContains(response, 'Nombre de usuario/correo electrónico o contraseña incorrectos')
 
     def test_logout(self):
         # Iniciar sesión primero para realizar el cierre de sesión
