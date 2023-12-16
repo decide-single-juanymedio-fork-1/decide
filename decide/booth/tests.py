@@ -14,16 +14,17 @@ class BoothTestCase(BaseTestCase):
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.superuser = User.objects.create_superuser(username='superuser', email='superuser@example.com', password='superpassword')
     def tearDown(self):
         super().tearDown()
     def testBoothNotFound(self):
-        
+
         # Se va a probar con el numero 10000 pues en las condiciones actuales en las que nos encontramos no parece posible que se genren 10000 votaciones diferentes
         response = self.client.get('/booth/10000/')
         self.assertEqual(response.status_code, 404)
-    
+
     def testBoothRedirection(self):
-        
+
         # Se va a probar con el numero 10000 pues en las condiciones actuales en las que nos encontramos no parece posible que se genren 10000 votaciones diferentes
         response = self.client.get('/booth/10000')
         self.assertEqual(response.status_code, 301)
@@ -43,7 +44,7 @@ class BoothTestCase(BaseTestCase):
         })
 
         self.assertEqual(response["Location"], "/booth/thanks/")
-    
+
     def test_forms(self):
         form_test = CreateUserForm(data={
             'username': 'EGCuser1',
@@ -72,6 +73,7 @@ class BoothTestCase(BaseTestCase):
         data = {'username': 'testuser', 'password': 'testpassword'}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 302)  # 302: Redirección al inicio de sesión exitoso
+        self.assertRedirects(response, 'thanks')
 
     def test_login_unsuccessful(self):
         # Prueba de inicio de sesión fallido con credenciales inválidas
@@ -94,3 +96,11 @@ class BoothTestCase(BaseTestCase):
         # Verificar que la clave de sesión ya no esté presente
         session_key = self.client.session.get(SESSION_KEY)
         self.assertIsNone(session_key)
+
+    def test_login_superuser_redirect(self):
+        # Prueba de inicio de sesión exitoso para superusuario
+        url = reverse('login')
+        data = {'username': 'superuser', 'password': 'superpassword'}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)  # Redirección al éxito de inicio de sesión
+        self.assertRedirects(response, '/admin', fetch_redirect_response=False)
