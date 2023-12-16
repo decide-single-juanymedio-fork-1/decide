@@ -1,15 +1,19 @@
 from django.test import TestCase
+from django.urls import reverse
 from base.tests import BaseTestCase
 from http import HTTPStatus
 from .models import form
 from .forms import OrderForm, CreateUserForm
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib.auth import SESSION_KEY
 
 # Create your tests here.
 
 class BoothTestCase(BaseTestCase):
     def setUp(self):
         super().setUp()
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
     def tearDown(self):
         super().tearDown()
     def testBoothNotFound(self):
@@ -61,3 +65,32 @@ class BoothTestCase(BaseTestCase):
             'password2': 'olvidelapassword'
         })
         self.assertFalse(form_test.is_valid())
+
+    def test_login_successful(self):
+        # Prueba de inicio de sesión exitoso con credenciales válidas
+        url = reverse('login')
+        data = {'username': 'testuser', 'password': 'testpassword'}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)  # 302: Redirección al inicio de sesión exitoso
+
+    def test_login_unsuccessful(self):
+        # Prueba de inicio de sesión fallido con credenciales inválidas
+        url = reverse('login')
+        data = {'username': 'testuser', 'password': 'wrongpassword'}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)  # 200: Página de inicio de sesión (fallido)
+        self.assertContains(response, 'Nombre de usuario o contraseña incorrectos')
+
+    def test_logout(self):
+        # Iniciar sesión primero para realizar el cierre de sesión
+        url = reverse('login')
+        data = {'username': 'testuser', 'password': 'testpassword'}
+        response = self.client.post(url, data)
+
+        url = reverse('logout')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)  # 302: Redirección al cierre de sesión
+
+        # Verificar que la clave de sesión ya no esté presente
+        session_key = self.client.session.get(SESSION_KEY)
+        self.assertIsNone(session_key)
