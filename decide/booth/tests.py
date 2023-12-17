@@ -122,3 +122,10 @@ class BoothTestCase(BaseTestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 302)  # Redirección al éxito de inicio de sesión
         self.assertRedirects(response, '/admin', fetch_redirect_response=False)
+
+    def test_home_page_no_votes(self):
+
+        url = reverse('home')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['my_votings'], [])
