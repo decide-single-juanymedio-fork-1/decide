@@ -15,7 +15,7 @@ from base import mods
 from store.models import Vote
 from voting.models import Voting
 from .models import *
-from .forms import CustomUserChangeForm, OrderForm, CreateUserForm
+from .forms import CustomUserChangeForm, CreateUserForm
 
 
 

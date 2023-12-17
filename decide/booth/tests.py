@@ -7,8 +7,6 @@ from .forms import OrderForm, CreateUserForm, CustomUserChangeForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import SESSION_KEY
-from django.contrib.messages.storage.fallback import FallbackStorage
-from django.contrib import messages
 
 # Create your tests here.
 
