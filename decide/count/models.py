@@ -11,7 +11,7 @@ class Preference(models.Model):
         postproc_list = voting.postproc if voting.postproc else []
         postproc_dict = {option['option']+'('+ str(option['number']) +')': option['postproc'] for option in postproc_list}
         solution_dict = dict(sorted(postproc_dict.items(), key=lambda item: item[1], reverse=True))
-        formatted_solution = ', '.join([f'{key}: {value}' for key, value in solution_dict.items()])
+        formatted_solution = ',\n '.join([f'{i+1}- {key}: {value}' for i, (key, value) in enumerate(solution_dict.items())])
         self.solution = formatted_solution
         self.save()
 
