@@ -10,8 +10,6 @@ from django.utils.translation import activate
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.utils.html import format_html
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 
 from base import mods
 from census.models import Census
@@ -39,7 +37,7 @@ def get_new_votings(user):
         voting = Voting.objects.get(id=census.voting_id)
         if voting.start_date and not voting.end_date:
             try:
-                vote = Vote.objects.get(voting_id=voting.id, voter_id=user.id)
+                Vote.objects.get(voting_id=voting.id, voter_id=user.id)
             except Vote.DoesNotExist:
                 new_voting_ids.append(voting.id)
 
