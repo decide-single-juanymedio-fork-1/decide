@@ -72,7 +72,7 @@ class BoothTestCase(BaseTestCase):
         url = reverse('login')
         data = {'username': 'testuser', 'password': 'testpassword'}
         response = self.client.post(url, data)
-        expected_url = reverse('thanks')
+        expected_url = reverse('home')
         self.assertEqual(response.status_code, 302)  # 302: Redirección al inicio de sesión exitoso
         self.assertRedirects(response, expected_url)
 
@@ -81,7 +81,7 @@ class BoothTestCase(BaseTestCase):
         url = reverse('login')
         data = {'username': 'testuser@email.com', 'password': 'testpassword'}
         response = self.client.post(url, data)
-        expected_url = reverse('thanks')
+        expected_url = reverse('home')
         self.assertEqual(response.status_code, 302)  # 302: Redirección al inicio de sesión exitoso
         self.assertRedirects(response, expected_url)
 
