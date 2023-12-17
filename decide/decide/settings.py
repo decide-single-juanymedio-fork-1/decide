@@ -29,8 +29,8 @@ ALLOWED_HOSTS = []
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp-mail.outlook.com'
-EMAIL_HOST_USER = 'egcdecide9@outlook.com'
-EMAIL_HOST_PASSWORD = 'egcdecide123'
+EMAIL_HOST_USER = os.environ.get('OL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('OL_PASS')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
