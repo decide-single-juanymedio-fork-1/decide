@@ -119,7 +119,7 @@ class VotingUpdate(generics.RetrieveUpdateDestroyAPIView):
                 voting.tally_votes(request.auth.key)
                 msg = 'Voting tallied'
 
-                 #Recuperamos los emails de los votantes asociados con la votación según el censo
+                #Recuperamos los emails de los votantes asociados con la votación según el censo
                 voter_ids = Census.objects.filter(voting_id=voting.id).values_list('voter_id', flat=True)
                 voters_emails = User.objects.filter(id__in=voter_ids).values_list('email', flat=True)
 
