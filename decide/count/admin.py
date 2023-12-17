@@ -15,6 +15,14 @@ class ApportionmentAdmin(admin.ModelAdmin):
 
     actions = ['dhondt','sainte_lague']
 
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        formfield = super().formfield_for_dbfield(db_field, **kwargs)
+
+        if db_field.name == 'seats':
+            formfield.help_text = "It is recommended that the seats be a multiple of the total votes."
+
+        return formfield
+
     def dhondt(self, request, queryset):
         for apportionment in queryset:
             voting_id = apportionment.voting_id

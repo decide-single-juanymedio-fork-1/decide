@@ -70,4 +70,4 @@ class Apportionment(models.Model):
         unique_together = (('voting_id', 'seats', 'method'),)
 
     def __str__(self):
-        return 'Voting: {} - Seats: ({})'.format(self.voting_id, self.seats)
+        return 'Voting: {} - Seats: {}'.format(self.voting_id, self.seats)
