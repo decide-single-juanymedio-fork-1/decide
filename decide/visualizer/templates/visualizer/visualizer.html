@@ -5,6 +5,7 @@
     <link type="text/css" rel="stylesheet"
          href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="{% static "booth/style.css" %}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js">
 {% endblock %}
 
 {% block content %}
@@ -74,7 +75,9 @@
                     </tbody>
                 </table>
             </div>
-
+        </div>
+        <div id="chartContainer" style="margin: 0 auto; width: 60%;">
+            <canvas id="barChartCanvas" width="400" height="200"></canvas>
         </div>
     </div>
 {% endblock %}
@@ -84,6 +87,8 @@
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap@5.2.2/dist/js/bootstrap.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
 
     <script>
         var voting = {{voting|safe}};
@@ -92,10 +97,50 @@
             delimiters: ['[[', ']]'],
             data() {
                 return {
-                    voting: voting
+                    voting: voting,
+                    showChart: false
+                };
+            },
+            mounted() {
+                if (this.voting.end_date) {
+                    this.showChart = true;
+                    this.renderCharts();
+                }
+            },
+            methods: {
+                renderCharts() {
+                    var ctx = document.getElementById('barChartCanvas').getContext('2d');
+                    var horizontalBarChart = new Chart(ctx, {
+                        type: 'horizontalBar',
+                        data: {
+                            labels: this.voting.postproc.map(opt => opt.option),
+                            datasets: [{
+                                label: 'Puntuación',
+                                data: this.voting.postproc.map(opt => opt.postproc),
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                xAxes: [{
+                                    ticks: {
+                                        beginAtZero: true,
+                                        precision: 0
+                                    }
+                                }],
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
                 }
             }
-        }).mount('#app-visualizer')
+        }).mount('#app-visualizer');
     </script>
-</body>
+
 {% endblock %}
