@@ -63,6 +63,7 @@ class ApportionmentAdmin(admin.ModelAdmin):
 
     actions = ['dhondt','sainte_lague']
 
+    # pylint: disable=arguments-differ
     def formfield_for_dbfield(self, db_field, **kwargs):
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
 
@@ -190,6 +191,7 @@ class PreferenceAdmin(admin.ModelAdmin):
                 )
 
     sort.short_description = 'Sort'
+
 
 admin.site.register(Apportionment, ApportionmentAdmin)
 admin.site.register(Preference, PreferenceAdmin)
