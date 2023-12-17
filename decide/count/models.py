@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
@@ -8,6 +9,8 @@ class Preference(models.Model):
     solution = models.TextField(blank=True, null=True)
 
     def sort(self, voting):
+        if not voting.postproc:
+            raise ValidationError("No postprocessing data available.")
         postproc_list = voting.postproc if voting.postproc else []
         postproc_dict = {option['option']+'('+ str(option['number']) +')': option['postproc'] for option in postproc_list}
         solution_dict = dict(sorted(postproc_dict.items(), key=lambda item: item[1], reverse=True))
@@ -33,6 +36,8 @@ class Apportionment(models.Model):
         return postproc_dict
 
     def dhondt(self, voting):
+        if not voting.postproc:
+            raise ValidationError("No postprocessing data available.")
         self.method = 'D\'Hondt'
         postproc_dict = self.generate_postproc_dict(voting)
         seats_count_dicc = postproc_dict.copy()
@@ -50,6 +55,8 @@ class Apportionment(models.Model):
         self.save()
 
     def sainte_lague(self, voting):
+        if not voting.postproc:
+            raise ValidationError("No postprocessing data available.")
         self.method = 'Sainte-Laguë'
         postproc_dict = self.generate_postproc_dict(voting)
         seats_count_dicc = postproc_dict.copy()
