@@ -1,4 +1,3 @@
-import datetime
 import json
 from django.views.generic import TemplateView
 from django.conf import settings
@@ -12,7 +11,6 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 
 from base import mods
-from census.models import Census
 from store.models import Vote
 from voting.models import Voting
 from .models import *
