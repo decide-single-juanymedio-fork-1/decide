@@ -11,6 +11,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 
 from base import mods
+from store.models import Vote
+from voting.models import Voting
 from .models import *
 from .forms import OrderForm, CreateUserForm
 
@@ -83,14 +85,14 @@ class BoothView(TemplateView):
                     return redirect('/admin')
                 else:
                     login(request, user_by_username)
-                    return redirect('thanks')
+                    return redirect('home')
             elif user_by_email is not None:
                 if user_by_email.is_superuser:
                     login(request, user_by_email)
                     return redirect('/admin')
                 else:
                     login(request, user_by_email)
-                    return redirect('thanks')
+                    return redirect('home')
             else:
                 messages.info(request, 'Nombre de usuario/correo electrónico o contraseña incorrectos')
         return render(request, 'login.html', {})
@@ -98,6 +100,26 @@ class BoothView(TemplateView):
     def logoutUser(request):
         logout(request)
         return redirect('login')
+
+    def homePage(request):
+        user = request.user
+        filtered_votes = Vote.objects.filter(voter_id=user.id)
+        my_votings = []
+
+        for v in filtered_votes:
+            voting_id = v.voting_id
+
+            try:
+                voting = Voting.objects.get(id=voting_id)
+                my_votings.append(voting.name)
+            except Voting.DoesNotExist:
+                my_votings.append('')
+
+            for vot in my_votings:
+                if vot == '':
+                    my_votings.remove(vot)
+
+        return render(request, 'home.html', {'my_votings': my_votings})
 
 class StaticViews(TemplateView):
     template_name = 'thanks.html'
