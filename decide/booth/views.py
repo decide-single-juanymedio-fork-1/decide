@@ -63,6 +63,8 @@ class BoothView(TemplateView):
             form = CreateUserForm(request.POST)
             if form.is_valid():
                 form.save()
+                user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password1'])
+                login(request, user)
                 return redirect('thanks')
         else:
             form = CreateUserForm()

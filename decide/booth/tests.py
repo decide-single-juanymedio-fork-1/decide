@@ -33,7 +33,7 @@ class BoothTestCase(BaseTestCase):
         response = self.client.get("/booth/register/")
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertContains(response, "<title>Registrar nuevo usuario</title>", html=True)
+        self.assertContains(response, "REGISTRO DE USUARIO")
 
     def test_post_success(self):
         response = self.client.post("/booth/register/", data={
