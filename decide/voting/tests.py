@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
+from django.core import mail
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.core.exceptions import ValidationError
@@ -24,7 +25,6 @@ from mixnet.mixcrypt import MixCrypt
 from mixnet.models import Auth
 from voting.models import Voting, Question, QuestionOption
 from datetime import datetime
-
 
 class VotingTestCase(BaseTestCase):
 
@@ -218,8 +218,33 @@ class VotingTestCase(BaseTestCase):
         response = self.client.put('/voting/{}/'.format(voting.pk), data, format='json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), 'Voting already tallied')
-    
 
+    def test_email_notification(self):
+        voting = self.create_voting()
+        self.login()
+
+        # Testear que la acción start envía un correo
+        data = {'action': 'start'}
+        response = self.client.put('/voting/{}/'.format(voting.pk), data, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), 'Voting started')
+        self.assertEqual(len(mail.outbox), 1)  # Asumimos que se envió un email
+        self.assertIn('Una votación ha empezado', mail.outbox[0].subject)  # Chequeamos asunto del email
+
+        # Testear que la acción stop no envía un correo
+        data = {'action': 'stop'}
+        response = self.client.put('/voting/{}/'.format(voting.pk), data, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), 'Voting stopped')
+        self.assertEqual(len(mail.outbox), 1)  # Asumimos que no se envió ningún email
+
+        # Testear que la acción tally envía un correo
+        data = {'action': 'tally'}
+        response = self.client.put('/voting/{}/'.format(voting.pk), data, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), 'Voting tallied')
+        self.assertEqual(len(mail.outbox), 2)  # Asumimos que hay 2 emails
+        self.assertIn('Resultados de votación', mail.outbox[1].subject)  # Chequeamos asunto del segundo email
 
     def test_voting_name_and_desc_validator(self):
         question = Question(desc="Esta es una pregunta sin palabras ofensivas")
@@ -302,7 +327,7 @@ class LogInErrorTests(StaticLiveServerTestCase):
     def usernameWrongLogIn(self):
         self.cleaner.get(self.live_server_url+"/admin/login/?next=/admin/")
         self.cleaner.set_window_size(1280, 720)
-        
+
         self.cleaner.find_element(By.ID, "id_username").click()
         self.cleaner.find_element(By.ID, "id_username").send_keys("usuarioNoExistente")
 
@@ -359,7 +384,7 @@ class QuestionsTests(StaticLiveServerTestCase):
         self.cleaner.find_element(By.ID, "id_password").send_keys("Keys.ENTER")
 
         self.cleaner.get(self.live_server_url+"/admin/voting/question/add/")
-        
+
         self.cleaner.find_element(By.ID, "id_desc").click()
         self.cleaner.find_element(By.ID, "id_desc").send_keys('Test')
         self.cleaner.find_element(By.ID, "id_options-0-number").click()
@@ -403,7 +428,7 @@ class QuestionsTests(StaticLiveServerTestCase):
         with self.assertRaises(ValidationError):
             pregunta_ofensiva.clean()
 
-    
+
     def test_question_option_validator(self):
         question = Question(desc="Esta es una pregunta sin palabras ofensivas")
         question.clean()
