@@ -246,6 +246,38 @@ class VotingTestCase(BaseTestCase):
         self.assertEqual(len(mail.outbox), 2)  # Asumimos que hay 2 emails
         self.assertIn('Resultados de votación', mail.outbox[1].subject)  # Chequeamos asunto del segundo email
 
+    def test_reset_voting_negative(self):
+        voting = self.create_voting()
+        self.login()
+
+        data = {'action': 'start'}
+        response = self.client.put('/voting/{}/'.format(voting.pk), data, format='json')
+
+        # Intentar reset con una votacion recien creada/empezada
+        data = {'action': 'reset'}
+        response = self.client.put('/voting/{}/'.format(voting.pk), data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), 'Voting is already in a fresh state')
+
+    def test_reset_voting_positive(self):
+        voting = self.create_voting()
+        self.login()
+
+        data = {'action': 'start'}
+        response = self.client.put('/voting/{}/'.format(voting.pk), data, format='json')
+        data = {'action': 'stop'}
+        response = self.client.put('/voting/{}/'.format(voting.pk), data, format='json')
+        # Intentar reset con una votacion finalizada
+        data = {'action': 'reset'}
+        response = self.client.put('/voting/{}/'.format(voting.pk), data, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), 'Voting reset successfully')
+
+        # Testear que los campos start_date, end_date y pub_key están vacios
+        self.assertIsNone(voting.start_date)
+        self.assertIsNone(voting.end_date)
+        self.assertIsNone(voting.pub_key)
+
     def test_voting_name_and_desc_validator(self):
         question = Question(desc="Esta es una pregunta sin palabras ofensivas")
         question.clean()
