@@ -1,3 +1,5 @@
+import random
+from django.db import transaction
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
@@ -7,10 +9,13 @@ from rest_framework.test import APITestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
 
 from .models import Census
+from base import mods
 from base.tests import BaseTestCase
 from datetime import datetime
 
