@@ -22,6 +22,40 @@ class DefVisualizer(TaskSet):
         self.client.get("/visualizer/{0}/".format(VOTING))
 
 
+
+class DefThanks(TaskSet):
+
+    @task
+    def index(self):
+        self.client.get("/booth/thanks/")
+
+
+class DefViewRegister(TaskSet):
+
+    @task
+    def index(self):
+        self.client.get("/booth/register/")
+
+class DefRegister(TaskSet):
+
+    def on_start(self):
+        with open('voters.json') as f:
+            self.voters = json.loads(f.read())
+        self.voter = choice(list(self.voters.items()))
+
+    @task
+    def register(self):
+        username, pwd = self.voter
+        self.register = self.client.post("/booth/register/", {
+            "username": username,
+            "email": "testing@email.com",
+            "password1": pwd,
+            "password2": pwd
+        }).json()
+
+    def on_quit(self):
+        self.voter = None
+
 class DefVoters(SequentialTaskSet):
 
     def on_start(self):
@@ -72,4 +106,19 @@ class Visualizer(HttpUser):
 class Voters(HttpUser):
     host = HOST
     tasks = [DefVoters]
+    wait_time= between(3,5)
+
+class Register(HttpUser):
+    host = HOST
+    tasks = [DefRegister]
+    wait_time= between(3,5)
+
+class Thanks(HttpUser):
+    host = HOST
+    tasks = [DefThanks]
+    wait_time= between(3,5)
+
+class ViewRegister(HttpUser):
+    host = HOST
+    tasks = [DefViewRegister]
     wait_time= between(3,5)

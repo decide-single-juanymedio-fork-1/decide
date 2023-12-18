@@ -3,9 +3,9 @@
   become: yes
   become_user: decide
   git:
-    repo: 'https://github.com/wadobo/decide.git'
+    repo: 'https://github.com/decide-single-juanymedio-fork-1/decide.git'
     dest: /home/decide/decide
-    version: master
+    version: main
 
 - name: Python virtualenv
   become: yes

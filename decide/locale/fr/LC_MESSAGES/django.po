@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-13 16:50+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: booth/templates/booth/booth.html:24
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: booth/templates/booth/booth.html:110
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: booth/templates/booth/booth.html:120
+msgid "Password"
+msgstr "Mot de passe"
+
+#: booth/templates/booth/booth.html:129
+msgid "Login"
+msgstr "Login"
+
+#: booth/templates/booth/booth.html:152
+msgid "Vote"
+msgstr "Vote"
+
+#: booth/templates/booth/booth.html:255 booth/templates/booth/booth.html:266
+#: booth/templates/booth/booth.html:304
+msgid "Error: "
+msgstr "Erreur: "
+
+#: booth/templates/booth/booth.html:300
+msgid "Congratulations. Your vote has been sent"
+msgstr "Félicitations. Votre vote a été envoyé"

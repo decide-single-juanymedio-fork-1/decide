@@ -29,7 +29,26 @@
                             Login
                         </button>
                     </li>
+                    <li class="nav-item" v-if="signup">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-secondary" >
+                           <a href="{% url 'register' %}">Register</a>
+                        </button>
+                    </li>
                 </ul>
+                <div class="language-switch">
+                    <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.path }}">
+                        <select name="language" id="language-select" class="form-select" onchange="this.form.submit()">
+                            {% for lang_code, lang_name in LANGUAGES %}
+                                <option value="{{ lang_code }}" {% if lang_code == LANGUAGE_CODE %}selected{% endif %}>
+                                    {{ lang_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </div>
             </div>
         </div>
     </nav>
@@ -112,6 +131,7 @@
                     </div>
                 </div>
             </div>
+            
         </div>
 
         <!-- Voting -->
@@ -151,10 +171,10 @@
     <script src="{% static "crypto/elgamal.js" %}"></script>
 
     <!-- Vuejs -->
-    <script src="https://unpkg.com/vue@latest"</script>
+    <script src="https://unpkg.com/vue@latest"></script>
     <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap@5.2.2/dist/js/bootstrap.js"></script>
-
+    
     <script>
         const { createApp } = Vue
         var voting = {{voting|safe}};
@@ -264,6 +284,8 @@
                 decideSend(evt) {
                     evt.preventDefault();
                     var v = this.decideEncrypt();
+                    var x = window.confirm("¿Está seguro de su elección?");
+                    if (x == true) {
                     var data = {
                         vote: {a: v.alpha.toString(), b: v.beta.toString()},
                         voting: this.voting.id,
@@ -280,6 +302,7 @@
                             this.succesVote = false;
                             this.showAlert("danger", '{% trans "Error: " %}' + error);
                         });
+                    }
                 },
                 showAlert(lvl, msg) {
                     this.alertLvl = lvl;
