@@ -1,13 +1,9 @@
 import time
-from django.test import TestCase
 from base.tests import BaseTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
 
 #PARA QUE ESTAS PRUEBAS FUNCIONEN CORRECTAMENTE, ES NECESARIO REALIZAR EL ./manage.py flush y luego ./manage.py loaddata populate.json, y finalmente
 #.manage.py runserver
