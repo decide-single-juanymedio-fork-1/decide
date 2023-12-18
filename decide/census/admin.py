@@ -1,4 +1,4 @@
-from django.contrib import admin, messages
+from django.contrib import admin
 import csv
 from django.http import HttpResponse
 

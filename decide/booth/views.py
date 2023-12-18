@@ -2,8 +2,6 @@ import json
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.http import Http404
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.utils.translation import activate
@@ -17,7 +15,6 @@ from base import mods
 from census.models import Census
 from store.models import Vote
 from voting.models import Voting
-from .models import *
 from .forms import CustomUserChangeForm, CreateUserForm
 
 

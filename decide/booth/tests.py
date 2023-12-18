@@ -1,10 +1,7 @@
-from django.test import TestCase
 from django.urls import reverse
 from base.tests import BaseTestCase
 from http import HTTPStatus
-from .models import form
-from .forms import OrderForm, CreateUserForm, CustomUserChangeForm
-from django.shortcuts import render, redirect
+from .forms import CreateUserForm
 from django.contrib.auth.models import User
 from django.contrib.auth import SESSION_KEY
 
