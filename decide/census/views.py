@@ -59,11 +59,11 @@ class CensusDetail(generics.RetrieveDestroyAPIView):
         except ObjectDoesNotExist:
             return Response('Invalid voter', status=ST_401)
         return Response('Valid voter')
-    
+
 
 class CensusExport(generics.ListAPIView):
     permission_classes = [IsAdminUser]
-    
+
     def list(self, request, *args, **kwargs):
         voting_id = request.GET.get('voting_id')
         census_data = Census.objects.filter(voting_id=voting_id)
@@ -93,7 +93,7 @@ class ImportCensus(View):
                 try:
                     contenido_texto = archivo.read().decode('utf-8').splitlines()
                     csv_reader = csv.reader(contenido_texto)
-                    encabezados = next(csv_reader)
+                    next(csv_reader)
                     for row in csv_reader:
                         voting_id, voter_id = row
                         Census.objects.create(voting_id=voting_id, voter_id=voter_id)
