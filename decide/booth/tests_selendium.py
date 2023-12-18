@@ -1,63 +1,93 @@
+import time
+from django.test import TestCase
+from base.tests import BaseTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 
-class TestBoothview():
-  def setup_method(self, method):
-    self.driver = webdriver.Chrome()
-    self.vars = {}
+#PARA QUE ESTAS PRUEBAS FUNCIONEN CORRECTAMENTE, ES NECESARIO REALIZAR EL ./manage.py flush y luego ./manage.py loaddata populate.json, y finalmente
+#.manage.py runserver
+class TestBoothview(StaticLiveServerTestCase):
 
-  def teardown_method(self, method):
+  def setUp(self):
+    self.base = BaseTestCase()
+    self.base.setUp()
+
+    options = webdriver.ChromeOptions()
+    options.headless = False
+    self.driver = webdriver.Chrome(options=options)
+
+    super().setUp()
+
+  def tearDown(self):
+    super().tearDown()
     self.driver.quit()
+
+    self.base.tearDown()
 
   def test_boothview(self):
     #Logearse y realizar votación con ayuda de la notificación
     self.driver.get("http://127.0.0.1:8000/")
-    self.driver.set_window_size(910, 1016)
     self.driver.find_element(By.NAME, "username").click()
     self.driver.find_element(By.NAME, "username").send_keys("usuario1")
     self.driver.find_element(By.NAME, "password").click()
     self.driver.find_element(By.NAME, "password").send_keys("practica1")
+    time.sleep(5)
     self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
+    time.sleep(5)
     self.driver.find_element(By.LINK_TEXT, "aquí").click()
+    time.sleep(5)
     self.driver.find_element(By.CSS_SELECTOR, ".navbar-toggler-icon").click()
+    time.sleep(5)
     self.driver.find_element(By.CSS_SELECTOR, ".nav-item:nth-child(1) > .btn").click()
+    time.sleep(5)
     self.driver.find_element(By.ID, "username").click()
     self.driver.find_element(By.ID, "username").send_keys("usuario1")
+    self.driver.find_element(By.ID, "password").click()
     self.driver.find_element(By.ID, "password").send_keys("practica1")
-    self.driver.find_element(By.ID, "registerModal").click()
-    element = self.driver.find_element(By.CSS_SELECTOR, ".nav-item:nth-child(1) > .btn")
-    actions = ActionChains(self.driver)
-    actions.move_to_element(element).perform()
-    self.driver.find_element(By.CSS_SELECTOR, ".nav-item:nth-child(1) > .btn").click()
-    element = self.driver.find_element(By.CSS_SELECTOR, "body")
-    actions = ActionChains(self.driver)
-    actions.move_to_element(element, 0, 0).perform()
+    time.sleep(5)
     self.driver.find_element(By.CSS_SELECTOR, ".btn-primary").click()
-    self.driver.find_element(By.CSS_SELECTOR, "form:nth-child(3) > .form-group").click()
-    self.driver.find_element(By.ID, "q1").click()
+    time.sleep(5)
+    self.driver.find_element(By.ID, "q2").click()
+    time.sleep(5)
     self.driver.find_element(By.CSS_SELECTOR, ".btn-primary").click()
+    time.sleep(5)
     assert self.driver.switch_to.alert.text == "¿Está seguro de su elección?"
     self.driver.switch_to.alert.accept()
+    time.sleep(5)
     self.driver.find_element(By.CSS_SELECTOR, ".btn-secondary").click()
+    self.driver.close()
+
 
   def test_boothview2(self):
-    #Crear usuario, modificarlo y luego cerrar cesion
     self.driver.get("http://127.0.0.1:8000/")
-    self.driver.set_window_size(910, 1016)
-    self.driver.find_element(By.NAME, "username").click()
     self.driver.find_element(By.LINK_TEXT, "Regístrese").click()
-    self.driver.find_element(By.ID, "id_username").click()
+    time.sleep(5)
     self.driver.find_element(By.ID, "id_username").send_keys("usuario4")
     self.driver.find_element(By.ID, "id_email").click()
     self.driver.find_element(By.ID, "id_email").send_keys("usuario4@us.es")
     self.driver.find_element(By.ID, "id_password1").click()
     self.driver.find_element(By.ID, "id_password1").send_keys("practica4")
+    self.driver.find_element(By.ID, "id_password2").click()
     self.driver.find_element(By.ID, "id_password2").send_keys("practica4")
+    time.sleep(5)
     self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
+    time.sleep(5)
     self.driver.find_element(By.LINK_TEXT, "Página principal").click()
+    time.sleep(5)
     self.driver.find_element(By.LINK_TEXT, "Cambiar perfil").click()
+    time.sleep(5)
     self.driver.find_element(By.ID, "id_email").click()
     self.driver.find_element(By.ID, "id_email").send_keys("usuario422@us.es")
+    time.sleep(5)
     self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
+    time.sleep(5)
+    self.driver.find_element(By.LINK_TEXT, "Página principal").click()
+    time.sleep(5)
     self.driver.find_element(By.LINK_TEXT, "Cerrar sesión").click()
+    self.driver.close()
+
