@@ -31,8 +31,7 @@ def tally(ModelAdmin, request, queryset):
 
 def reset(ModelAdmin, request, queryset):
     for v in queryset.all():
-        token= request.session.get('auth-token', '')
-        v.reset_voting(token)
+        v.reset_voting()
 
 class QuestionOptionInline(admin.TabularInline):
     model = QuestionOption

@@ -138,7 +138,7 @@ class VotingUpdate(generics.RetrieveUpdateDestroyAPIView):
 
         elif action == 'reset':
             if voting.start_date and voting.end_date:
-                voting.reset_voting(request.auth.key)
+                voting.reset_voting()
                 voting.save()
                 msg = 'Voting reset successfully'
             else:

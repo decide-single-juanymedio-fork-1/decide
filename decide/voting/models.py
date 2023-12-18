@@ -137,8 +137,7 @@ class Voting(models.Model):
         self.postproc = postp
         self.save()
 
-    def reset_voting(self, token=''):
-        auth = self.auths.first()
+    def reset_voting(self):
         self.start_date = None
         self.end_date = None
         self.pub_key = None
