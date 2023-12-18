@@ -3,7 +3,7 @@ from django.urls import reverse
 from base.tests import BaseTestCase
 from http import HTTPStatus
 from .models import form
-from .forms import OrderForm, CreateUserForm
+from .forms import OrderForm, CreateUserForm, CustomUserChangeForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import SESSION_KEY
@@ -129,3 +129,25 @@ class BoothTestCase(BaseTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['my_votings'], [])
+
+    def test_get_change_user_page(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('change_user'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'change_user.html')
+
+    def test_change_user_valid_form(self):
+        self.client.force_login(self.user)
+        data = {'username': 'newusername', 'email': 'new@example.com'}
+        response = self.client.post(reverse('change_user'), data)
+
+        self.assertRedirects(response, reverse('home'))  # Verifica la redirección después de guardar
+
+    def test_change_user_invalid_form(self):
+        self.client.force_login(self.user)
+        data = {}  # Envía un formulario vacío
+        response = self.client.post(reverse('change_user'), data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, 'form', 'username', 'Este campo es requerido.')  # Verifica el error en el formulario

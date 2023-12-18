@@ -10,13 +10,15 @@ from django.utils.translation import activate
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.utils.html import format_html
+from django.contrib.auth.decorators import login_required
+
 
 from base import mods
 from census.models import Census
 from store.models import Vote
 from voting.models import Voting
 from .models import *
-from .forms import OrderForm, CreateUserForm
+from .forms import CustomUserChangeForm, CreateUserForm
 
 
 
@@ -143,6 +145,20 @@ class BoothView(TemplateView):
             messages.success(request, format_html("Hay una nueva votación. Haga click <a href='/booth/{}'>aquí</a> para participar.", voting_id))
 
         return render(request, 'home.html', {'my_votings': my_votings})
+
+    @login_required
+    def change_user(request):
+        if request.method == 'POST':
+            form = CustomUserChangeForm(request.POST, instance=request.user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Perfil actualizado exitosamente.')
+                return redirect('home')
+        else:
+            form = CustomUserChangeForm(instance=request.user)
+
+        return render(request, 'change_user.html', {'form':form})
+
 
 class StaticViews(TemplateView):
     template_name = 'thanks.html'

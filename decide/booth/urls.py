@@ -7,6 +7,7 @@ urlpatterns = [
     path('register/', BoothView.registerPage, name='register'),
     path('thanks/', StaticViews.GiveThanks, name='thanks'),
     path('home/', BoothView.homePage, name='home'),
+    path('change_user/', BoothView.change_user, name='change_user'),
     path('1/', BoothView.as_view(), name='initialBooth'),
 ]
 
