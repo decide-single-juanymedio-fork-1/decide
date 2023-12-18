@@ -1,13 +1,11 @@
 import random
-import io
-import csv
-from django.db import IntegrityError, transaction
+from django.db import transaction
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework import status
-from rest_framework.test import APIClient, APITestCase
+from rest_framework.test import APITestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from selenium import webdriver
@@ -17,7 +15,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
 from .models import Census
-from .forms import ImportarCensoForm
 from base import mods
 from base.tests import BaseTestCase
 from datetime import datetime

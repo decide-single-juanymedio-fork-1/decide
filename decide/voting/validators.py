@@ -1,11 +1,9 @@
 from django.core.exceptions import ValidationError
-import re
 import unicodedata
-from django.utils.translation import gettext_lazy
 
 OFFENSIVE_WORDS = ["gilipollas", "lameculos", "idiota", "subnormal", "puto", "puta", "imbécil", "imbecil",
                     "cabrón", "cabrona", "pendejo", "estúpido", "estupido", "memo", "necio",
-                    "tonto"] 
+                    "tonto"]
 
 def borrar_acentos(value):
     nfkd_form = unicodedata.normalize('NFKD', value)
