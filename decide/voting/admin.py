@@ -29,6 +29,10 @@ def tally(ModelAdmin, request, queryset):
         token = request.session.get('auth-token', '')
         v.tally_votes(token)
 
+def reset(ModelAdmin, request, queryset):
+    for v in queryset.all():
+        token= request.session.get('auth-token', '')
+        v.reset_voting(token)
 
 class QuestionOptionInline(admin.TabularInline):
     model = QuestionOption
@@ -46,7 +50,8 @@ class VotingAdmin(admin.ModelAdmin):
     list_filter = (StartedFilter,)
     search_fields = ('name', )
 
-    actions = [ start, stop, tally ]
+    actions = [ start, stop, tally,reset ]
+
 
 
 admin.site.register(Voting, VotingAdmin)

@@ -137,6 +137,15 @@ class Voting(models.Model):
         self.postproc = postp
         self.save()
 
+    def reset_voting(self, token=''):
+        auth = self.auths.first()
+        self.start_date = None
+        self.end_date = None
+        self.pub_key = None
+        self.tally = None
+        self.postproc = None
+        self.save()
+
     def clean(self):
         validador_palabras_ofensivas(self.name)
         validador_palabras_ofensivas(self.desc)

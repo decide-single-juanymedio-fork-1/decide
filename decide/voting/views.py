@@ -136,6 +136,15 @@ class VotingUpdate(generics.RetrieveUpdateDestroyAPIView):
                 except Exception as e:
                     print(f"Error sending emails: {e}")
 
+        elif action == 'reset':
+            if voting.start_date and voting.end_date:
+                voting.reset_voting(request.auth.key)
+                voting.save()
+                msg = 'Voting reset successfully'
+            else:
+                msg = 'Voting is already in a fresh state'
+                st = status.HTTP_400_BAD_REQUEST
+
         else:
             msg = 'Action not found, try with start, stop or tally'
             st = status.HTTP_400_BAD_REQUEST
