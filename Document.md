@@ -11,12 +11,36 @@ Single Juanymedio 1
 
 
 
-### 3. Visión global del proceso de desarrolo
+### 3. Visión global del proceso de desarrollo
 
 
 
 ### 4. Entorno de desarrollo
 
+Todos los miembros hemos empleado Ubuntu 23.04 como sistema operativo de nuestros ordenadores personales, los cuales a su vez hemos utilizado para realizar este proyecto. 
+
+Para la gestión de versiones hemos empleado git y github, apuntando a nuestro repositorio el cual es un fork del repositorio de decide provisto por la asignatura. Mediante el empleo de python 3.10 (versión empleada para el desarrollo de nuestra aplicación de Decide) instalamos las herramientas de desarrollo de python "python3-dev" así como "python3-env" para poder crear el entorno virtual donde tendremos alojada nuestra aplicación. En nuestro entorno hemos instalado los mismos programas del documento "requirements.txt" cuyo contenido es:
+
+Django==4.1
+pycryptodome==3.15.0
+djangorestframework==3.14.0
+django-cors-headers==3.13.0
+requests==2.28.1
+django-filter==22.1
+psycopg2==2.9.4
+coverage==6.5.0
+jsonnet==0.18.0
+django-nose==1.4.6
+django-rest-swagger==2.2.0
+selenium==4.7.2
+dj-database-url==2.1.0
+pynose==1.4.8
+whitenoise==6.5.0
+gunicorn==21.2.0
+
+Utilizamos PostgreSQL para la creación de la base de datos.
+
+Todos los miembros hemos empleado Visual Studio Code como IDE para el desarrollo de la aplicación. Para el despliegue en Vagrant hemos empleado virtualBox. En docker hemos empleado la version 2.3.3 al igual que en las prácticas. Con respecto a workflow, mantuvimos la misma configuración que ya existía en decide.
 
 ### 5. Ejercicio de propuesta de cambio
 
@@ -36,6 +60,12 @@ Otro miembro del equipo, normalmente aquel que esté disponible lo antes posible
 
 La issue abierta será cerrada tanto en el apartado "issues" del repositorio como en el tablero kanbam del apartado "projects" del repositorio.
 
-
-
 ### 6. Conclusiones y trabajo futuro
+
+Durante el trascurso de este proyecto hemos atravesado distintas dificultades, la más notoria fue la transformación de proyecto part a proyecto single. Este cambio conllevo una pequeña reestructuración del trabajo pendiente por realizar.
+
+Tras repartir el trabajo, decidimos mantener la estructura GitFlow, puesto que estabamos familiarizados con ella y temíamos desarrollar el código frente a develop por posibles errores durante la realización del código.
+
+Pese a haber acordado unos milestones, el desarrollo de los incrementos no fue realizado por igual entre los distintos miembros del equipo, lo cual llevo a un breve lapso de pesimismo de cara a la entrega. Tras un proceso de comunicación, retomamos el proyecto y conseguimos tenerlo listo para la entrega.
+
+Este proyecto nos ha formado en uno de los aspectos técnicos más importantes de lo que será nuestro futuro laboral.
