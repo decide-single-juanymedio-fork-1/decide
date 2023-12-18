@@ -48,6 +48,7 @@ class DefRegister(TaskSet):
         username, pwd = self.voter
         self.register = self.client.post("/booth/register/", {
             "username": username,
+            "email": "testing@email.com",
             "password1": pwd,
             "password2": pwd
         }).json()
