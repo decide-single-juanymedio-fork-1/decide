@@ -4,6 +4,71 @@ Single Juanymedio 1
 =====================================
 
 ### 1. Resumen ejecutivo
+Nuestra labor en un principio consistía en desarrollar funcionalidades a los módulos `vote` y `store` al empezar siendo un Proyecto ‘Part’, pero con la decisión unánime de los integrantes de nuestro equipo de cambiar a ser un proyecto ‘Single’, hemos tocado múltiples módulos ya que no se tomó en cuenta el enfocarnos en alguno en específico, sino que se desarrollaron funcionalidades en base a los intereses que presentara cada miembro del equipo, asegurándose de que no se realizaran desarrollos en el mismo modulo al mismo tiempo o por lo menos avisar con antelación que se empezaría a trabajar en dicho modulo.
+
+A continuación, se da un resumen de la implementación realizada utilizando los ‘issues’ creados en el repositorio del proyecto en GitHub para trabajar en ellos:
+
+- **Issue #2 Feature – Doble check:**
+  Implementación de un pop-up para confirmar la respuesta deseada en una votación.
+
+- **Issue #5 Feature – Lenguaje ofensivo:**
+  No permitir un lenguaje ofensivo en las votaciones, preguntas ni tampoco en las opciones.
+
+- **Issue #8 Feature – Autenticación por email:**
+  Añadir el campo email a `user` para que este sirva para hacer login.
+
+- **Issue #10 Feature – Exportación de censo:**
+  Implementar la posibilidad de exportar el censo.
+
+- **Issue #11 Feature – Importación de censo desde Excel:**
+  Implementar la posibilidad de importar el censo para las votaciones desde un archivo Excel.
+
+- **Issue #14 Feature – Traducir la interfaz al español:**
+  Traducción de la interfaz de `decide` al español.
+
+- **Issue #15 Feature – Traducir la interfaz a otros idiomas:**
+  Traducción de la interfaz de `decide` a otros idiomas (francés).
+
+- **Issue #16 Feature – Formulario registro usuarios:**
+  Documento HTML que incluya un formulario con capacidad de crear nuevos usuarios.
+
+- **Issue #18 Feature – Mostrar información en tiempo real:**
+  Implementación de estadísticas a las votaciones abiertas y cerradas (con tally aplicado).
+
+- **Issue #21 Feature – Crear módulo de recuento:**
+  Crear un módulo de recuento donde aplicar técnicas más específicas de recuento como el método D’Hondt. Esta implementación fue cambiada a estar directamente implementada en el modulo `voting` debido a los conflictos que se presentaban con Docker.
+
+- **Issue #28 Feature – Agregar gráficas de resultados:**
+  Mostrar gráficas de los resultados de las votaciones cerradas (con tally).
+
+- **Issue #37 Feature – Añadir email al usuario y al registro de usuario:**
+  Añadir el atributo email al usuario, así como la posibilidad de registrar un email a su cuenta.
+
+- **Issue #39 Feature – Crear vista de login:**
+  Añadir una vista de inicio a la aplicación en la que se muestre la marca del producto y le permita al usuario realizar distintas acciones como registrarse o iniciar sesión, así como los métodos necesarios para iniciar sesión.
+
+- **Issue #41 Feature – Iniciar sesión con el correo electrónico:**
+  Añadir la posibilidad al usuario de iniciar sesión con su correo electrónico en lugar de su nombre de usuario.
+
+- **Issue #42 Feature – Permitir al admin iniciar sesión desde el inicio:**
+  Permitir al administrador o cualquier otro usuario con permisos de superusuario iniciar sesión desde la página de inicio, sin necesidad de escribir la URL `/admin` en el navegador.
+
+- **Issue #45 Feature – Notificar por email a usuarios de votación:**
+  Notificación automática a usuarios pertenecientes al censo de una votación recién iniciada.
+
+- **Issue #46 Feature – Página principal con información del usuario:**
+  Añadir una página principal que le permita al usuario acceder a información personal, como las encuestas en las que ha participado o su perfil personal.
+
+- **Issue #57 Feature – Notificación cuando el usuario es añadido a una nueva votación:**
+  Añadir una notificación a la página principal cuando el usuario es añadido a una nueva votación. Desde esta nueva notificación se mandará al usuario a la votación.
+
+- **Issue #59 Feature – Resetear votaciones:**
+  Implementada acción de reset sobre las votaciones en la vista de admin, llevando a las votaciones seleccionadas a su estado inicial (como recién creada).
+
+- **Issue #66 Feature – Modificar información del usuario:**
+  Permitir al usuario modificar su información personal, como el nombre de usuario o el correo electrónico.
+
+Como se puede observar con las funcionalidades implementadas, se le ha dado un enfoque de mejora en la accesibilidad de la aplicación facilitando tanto el manejo como la interacción sobre diferentes aspectos de `Decide`.
 
 
 
