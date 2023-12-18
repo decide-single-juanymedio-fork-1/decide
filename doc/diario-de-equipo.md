@@ -1,9 +1,8 @@
-# Diario del Equipo
-# decide-single-juanymedio-fork-1
+# Diario del Equipo: decide-single-juanymedio-fork-1
 
-* Grupo/s: 2 y 3
 * Curso Escolar: 2023/2024
 * Asignatura: Evolución y Gestión de la Configuración
+* Grupo/s: 2 y 3
 
 # Miembros del grupo
 
