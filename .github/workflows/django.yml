@@ -3,7 +3,8 @@ name: Python application
 on:
   push:
     branches:
-      - fix-Selenium_tests_en_workflow
+      - develop
+      - main
 
 jobs:
   build:
@@ -12,6 +13,7 @@ jobs:
         pyversion: ['3.10']
 
     runs-on: ubuntu-latest
+
     services:
       postgres:
         image: postgres:14.9
@@ -23,11 +25,6 @@ jobs:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-      selenium:
-        image: selenium/standalone-chrome:latest
-        ports:
-          - 4444:4444
-        options: --shm-size="2g"
 
     steps:
     - uses: actions/checkout@v3
@@ -50,11 +47,10 @@ jobs:
     - name: Run tests
       run: |
         cd decide
-        coverage run --branch --source=. ./manage.py test  --keepdb
-        coverage xml
+        coverage run --branch --source=. ./manage.py test  --keepdb 
+        coverage xml 
     - name: Codacy Coverage Reporter
       uses: codacy/codacy-coverage-reporter-action@v1
       with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: decide/coverage.xml
-
