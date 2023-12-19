@@ -17,7 +17,7 @@ class TestBoothview(StaticLiveServerTestCase):
     options.headless = True
     options.add_argument('--ignore-ssl-errors=yes')
     options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--no-sandbox')
+    options.add_argument('--sandbox')
     options.add_argument('--disable-dev-shm-usage')
     self.driver = webdriver.Chrome(options=options)
 
