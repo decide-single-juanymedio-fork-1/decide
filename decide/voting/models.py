@@ -220,3 +220,5 @@ class Apportionment(models.Model):
 
     def __str__(self):
         return 'Voting: {} - Seats: {}'.format(self.voting_id, self.seats)
+
+    # Prueba para el M3
